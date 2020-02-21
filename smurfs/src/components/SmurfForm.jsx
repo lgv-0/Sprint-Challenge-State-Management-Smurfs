@@ -39,7 +39,7 @@ export default class SmurfForm extends React.Component
             this.context.getSmurfs();
         }).catch((error)=>
         {
-            console.log(error.response.data.Error);
+            //Unhandled
         })
     }
 

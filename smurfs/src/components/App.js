@@ -14,10 +14,12 @@ class App extends Component
 
     this.state = 
     {
-      smurfs:[]
+      smurfs:[],
+      errorMsg:""
     }
 
     this.getSmurfs = this.getSmurfs.bind(this);
+    this.deleteSmurf = this.deleteSmurf.bind(this);
   }
 
   componentDidMount()
@@ -30,6 +32,20 @@ class App extends Component
     Axios.get("http://localhost:3333/smurfs").then((response)=>
     {
       this.setState({smurfs:response.data});
+    }).catch((error)=>
+    {
+      this.setState({errorMsg:error.response.data.Error})
+    })
+  }
+
+  deleteSmurf(id)
+  {
+    Axios.delete(`http://localhost:3333/smurfs/${id}`).then((response)=>
+    {
+      this.setState({smurfs:response.data})
+    }).catch((error)=>
+    {
+      this.setState({errorMsg:error.response.data.Error})
     })
   }
 
@@ -39,7 +55,9 @@ class App extends Component
       <div className="App">
         <h1>SMURFS!</h1>
         
-        <SmurfContext.Provider value={{smurfs:this.state.smurfs, getSmurfs:this.getSmurfs}}>
+        {this.state.errorMsg != "" ? <h1>{this.state.errorMsg}</h1> : null}
+
+        <SmurfContext.Provider value={{smurfs:this.state.smurfs, getSmurfs:this.getSmurfs, deleteSmurf:this.deleteSmurf}}>
           <SmurfList />
           <SmurfForm />
         </SmurfContext.Provider>
