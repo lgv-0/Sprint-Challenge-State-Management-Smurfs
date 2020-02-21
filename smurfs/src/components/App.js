@@ -18,7 +18,9 @@ class App extends Component
       errorMsg:""
     }
 
+    this.setError = this.setError.bind(this);
     this.getSmurfs = this.getSmurfs.bind(this);
+    this.addSmurf = this.addSmurf.bind(this);
     this.deleteSmurf = this.deleteSmurf.bind(this);
   }
 
@@ -27,14 +29,32 @@ class App extends Component
     this.getSmurfs();
   }
 
+  setError(inc)
+  {
+    this.setState({errorMsg:inc});
+  }
+
   getSmurfs()
   {
     Axios.get("http://localhost:3333/smurfs").then((response)=>
     {
       this.setState({smurfs:response.data});
+      this.setError("");
     }).catch((error)=>
     {
-      this.setState({errorMsg:error.response.data.Error})
+      this.setError(error.response.data.Error);
+    })
+  }
+
+  addSmurf(smurf)
+  {
+    Axios.post("http://localhost:3333/smurfs", smurf).then((response)=>
+    {
+        this.getSmurfs();
+        this.setError("");
+    }).catch((error)=>
+    {
+      this.setError(error.response.data.Error);
     })
   }
 
@@ -42,10 +62,11 @@ class App extends Component
   {
     Axios.delete(`http://localhost:3333/smurfs/${id}`).then((response)=>
     {
-      this.setState({smurfs:response.data})
+      this.setState({smurfs:response.data});
+      this.setError("");
     }).catch((error)=>
     {
-      this.setState({errorMsg:error.response.data.Error})
+      this.setError(error.response.data.Error);
     })
   }
 
@@ -57,7 +78,7 @@ class App extends Component
         
         {this.state.errorMsg != "" ? <h1>{this.state.errorMsg}</h1> : null}
 
-        <SmurfContext.Provider value={{smurfs:this.state.smurfs, getSmurfs:this.getSmurfs, deleteSmurf:this.deleteSmurf}}>
+        <SmurfContext.Provider value={{smurfs:this.state.smurfs, getSmurfs:this.getSmurfs, addSmurf:this.addSmurf, deleteSmurf:this.deleteSmurf}}>
           <SmurfList />
           <SmurfForm />
         </SmurfContext.Provider>

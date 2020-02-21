@@ -1,6 +1,5 @@
 import React from "react";
 import { SmurfContext } from "../contexts/SmurfContext";
-import Axios from "axios";
 
 export default class SmurfForm extends React.Component
 {
@@ -27,20 +26,12 @@ export default class SmurfForm extends React.Component
     {
         e.preventDefault();
 
-        let newSmurf =
+        this.context.addSmurf(
             {
                 name: e.target.name.value,
                 age: parseInt(e.target.age.value),
                 height: e.target.height.value + "cm"
-            }
-
-        Axios.post("http://localhost:3333/smurfs", newSmurf).then((response)=>
-        {
-            this.context.getSmurfs();
-        }).catch((error)=>
-        {
-            //Unhandled
-        })
+            });
     }
 
     nameCB(e) { this.setState({nameinput:e.target.value}); }
