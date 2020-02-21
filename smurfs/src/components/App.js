@@ -4,6 +4,7 @@ import Axios from "axios";
 
 import { SmurfContext } from "../contexts/SmurfContext";
 import SmurfList from "./SmurfList";
+import SmurfForm from "./SmurfForm";
 
 class App extends Component
 {
@@ -15,9 +16,16 @@ class App extends Component
     {
       smurfs:[]
     }
+
+    this.getSmurfs = this.getSmurfs.bind(this);
   }
 
   componentDidMount()
+  {
+    this.getSmurfs();
+  }
+
+  getSmurfs()
   {
     Axios.get("http://localhost:3333/smurfs").then((response)=>
     {
@@ -31,8 +39,9 @@ class App extends Component
       <div className="App">
         <h1>SMURFS!</h1>
         
-        <SmurfContext.Provider value={{smurfs:this.state.smurfs}}>
+        <SmurfContext.Provider value={{smurfs:this.state.smurfs, getSmurfs:this.getSmurfs}}>
           <SmurfList />
+          <SmurfForm />
         </SmurfContext.Provider>
       </div>
     );

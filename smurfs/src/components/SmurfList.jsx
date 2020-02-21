@@ -1,5 +1,6 @@
 import React from "react";
 import { SmurfContext } from "../contexts/SmurfContext";
+import Smurf from "./Smurf";
 
 export default class SmurfList extends React.Component
 {
@@ -8,14 +9,14 @@ export default class SmurfList extends React.Component
     render()
     {
         return (
-            <div>
+            <>
                 {
                     this.context.smurfs.map((i)=>
                     {
-                        return <h1 key={i.id}>{i.name}</h1>
+                        return <Smurf key={i.id} smurf={i} />
                     })
                 }
-            </div>
+            </>
         )
     }
 }
